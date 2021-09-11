@@ -7,7 +7,8 @@ int main() {
     char input[100];                    // buffer for user input
     int client_socket;                  // client side socket
     struct sockaddr_in client_address;  // client socket naming struct
-    char c;
+    char strChar;
+    char serverResponse
 
     printf("Daytime client\n");
 
@@ -34,13 +35,13 @@ int main() {
             // make the request to the server
             write(client_socket, input + i, sizeof(char));
             // get the result
-            read(client_socket, &c, sizeof(char));
-            if (c == 'q') {
+            read(client_socket, &char, sizeof(char));
+            if (char == '*') {
                 close(client_socket);
                 printf("\nDone!\n");
                 exit(EXIT_SUCCESS);
             }
-            printf("%c", c);
+            printf("%c", char);
             i++;
         }
     }
