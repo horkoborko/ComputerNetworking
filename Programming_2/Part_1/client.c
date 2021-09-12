@@ -8,7 +8,6 @@ int main() {
     int client_socket;                  // client side socket
     struct sockaddr_in client_address;  // client socket naming struct
     char strChar;
-    char serverResponse
 
     printf("Daytime client\n");
 
@@ -25,7 +24,7 @@ int main() {
         exit(EXIT_FAILURE);
     }
 
-    while (TRUE) {
+    while (true) {
         printf("Input: ");
         // read string
         fgets(input, sizeof(input), stdin);
@@ -33,15 +32,16 @@ int main() {
         int i = 0;
         while (*(input + i)) {
             // make the request to the server
-            write(client_socket, input + i, sizeof(char));
+            write(client_socket, input + i, sizeof(strChar));
             // get the result
-            read(client_socket, &char, sizeof(char));
-            if (char == '*') {
+            read(client_socket, &strChar, sizeof(strChar));
+            // user input to quit
+            if (strChar == 'q') {
                 close(client_socket);
                 printf("\nDone!\n");
                 exit(EXIT_SUCCESS);
             }
-            printf("%c", char);
+            printf("%c", strChar);
             i++;
         }
     }
