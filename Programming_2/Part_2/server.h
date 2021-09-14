@@ -17,7 +17,6 @@
 #include <unistd.h>
 
 #include <signal.h>
-#include <pthread.h>
 
 //For Threading
 #include <pthread.h>

@@ -4,7 +4,7 @@
  * MAIN
  ************************************************************************/
 
-int main(int argc, char** argv) {
+int main(int argc, char *argv[]) {
     int server_socket;                 // descriptor of server socket
     struct sockaddr_in server_address; // for naming the server's listening socket
     int client_socket;
@@ -37,22 +37,28 @@ int main(int argc, char** argv) {
     }
 
     // server loop
-    while ((client_socket = accept(server_socket, NULL, NULL) ) == -1)
+    while (true)
     {
 
         // accept connection to client
-        //create new thread for every incoming client
-        if ( pthread_create( &thread, NULL, handle_client, (void *) &server_socket ) == -1)
+        if ((client_socket = accept(server_socket, NULL, NULL)) == -1)
         {
             perror("Error accepting client");
         }else
         {
             printf("\nAccepted client\n");
-            handle_client(client_socket);
+            //create new thread for every incoming client
+            if(pthread_create( &thread, NULL, handle_client, &client_socket ) == -1)
+            {
+              perror("Error creating thread");
+            }
+
+            // detach tread
+            pthread_detach(thread);
+
+
         }
 
-        // detach tread
-        pthread_detach(thread);
     }
 }
 
@@ -99,9 +105,12 @@ void * handle_client(void *arg)
     if (close(client_socket) == -1)
     {
         perror("Error closing socket");
-        pthread_exit(EXIT_FAILURE);
-    } else
+        pthread_exit(NULL);
+    }
+    else
     {
         printf("\nClosed socket to client, exit");
     }
+
+    return 0;
 }
