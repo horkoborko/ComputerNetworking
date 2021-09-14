@@ -30,67 +30,16 @@ public class EchoServer {
     public void runServerLoop() throws IOException {
         System.out.println("Echo server started");
 
+        // searching for new clients connecting
         while (true) {
-            System.out.println("Waiting for connections on port #" + port);
 
-            EchoThread passOver = new EchoThread();
+            // accept new client trying to connect
+            clientSocket = serverSocket.accept();
 
-            passOver.handleClient(serverSocket.accept());
+            new Thread(new EchoThread(clientSocket)).start();
         }
 
     }
-
-    public void handleClient(Socket clientSocket) {
-
-        DataInputStream fromClient = null;
-        DataOutputStream toClient = null;
-
-        int charFromClient = 0;
-        int state = 0;
-        boolean keepGoing = true;
-
-        // show that we are connected to client
-        System.out.println("Client connected ...");
-
-        // first get the streams
-        try {
-            fromClient = new DataInputStream(clientSocket.getInputStream());
-            toClient = new DataOutputStream(clientSocket.getOutputStream());
-        } catch (IOException e) {
-            System.err.println("Error opening network streams");
-            return;
-        }
-
-        // now talk to the client
-        while (keepGoing) {
-            try {
-                charFromClient = fromClient.readByte();
-                System.out.print((char)charFromClient);
-            } catch (IOException e) {
-                System.err.println("Error reading character from client");
-                return;
-            }
-
-            try {
-                toClient.writeByte(charFromClient);
-            } catch (IOException e) {
-                System.err.println("Error writing character to client");
-                return;            }
-
-            if (charFromClient == 'q') {
-                System.out.println("\nBailing out!");
-                keepGoing = false;
-            }
-        }
-
-        try {
-            clientSocket.close();
-        } catch (IOException e) {
-            System.err.println("Error closing socket to client");
-        }
-
-    }
-
 
     public static void main(String args[]) throws Exception {
         // create instance of echo server
