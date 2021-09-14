@@ -28,14 +28,16 @@ public class EchoServer {
     }
 
     public void runServerLoop() throws IOException {
-
         System.out.println("Echo server started");
 
         while (true) {
             System.out.println("Waiting for connections on port #" + port);
 
-            handleClient(serverSocket.accept());
+            EchoThread passOver = new EchoThread();
+
+            passOver.handleClient(serverSocket.accept());
         }
+
     }
 
     public void handleClient(Socket clientSocket) {
@@ -74,7 +76,7 @@ public class EchoServer {
             } catch (IOException e) {
                 System.err.println("Error writing character to client");
                 return;            }
-            
+
             if (charFromClient == 'q') {
                 System.out.println("\nBailing out!");
                 keepGoing = false;
@@ -88,6 +90,7 @@ public class EchoServer {
         }
 
     }
+
 
     public static void main(String args[]) throws Exception {
         // create instance of echo server
