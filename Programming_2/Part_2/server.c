@@ -8,6 +8,7 @@ int main(int argc, char** argv) {
     int server_socket;                 // descriptor of server socket
     struct sockaddr_in server_address; // for naming the server's listening socket
     int client_socket;
+    pthread_t thread;                  // create thread id
 
     // sent when ,client disconnected
     signal(SIGPIPE, SIG_IGN);
@@ -36,23 +37,22 @@ int main(int argc, char** argv) {
     }
 
     // server loop
-    while (true)
+    while ((client_socket = accept(server_socket, NULL, NULL) ) == -1)
     {
 
         // accept connection to client
         //create new thread for every incoming client
-        if ((client_socket = pthread_create( accept(server_socket, NULL, NULL)) == -1) )
+        if ( pthread_create( &thread, NULL, handle_client, (void *) &server_socket ) == -1)
         {
             perror("Error accepting client");
-        }
-        else
+        }else
         {
             printf("\nAccepted client\n");
             handle_client(client_socket);
         }
 
         // detach tread
-        pthread_detatch(server_socket);
+        pthread_detach(thread);
     }
 }
 
@@ -61,14 +61,17 @@ int main(int argc, char** argv) {
  * handle client
  ************************************************************************/
 
-void handle_client(int client_socket) {
+void * handle_client(void *arg)
+{
+    int client_socket = *( (int *) arg );
     char input;
     int keep_going = true;
 
     while (keep_going)
     {
         // read char from client
-        switch (read(client_socket, &input, sizeof(char))) {
+        switch (read(client_socket, &input, sizeof(char)))
+        {
             case 0:
                 keep_going = false;
                 printf("\nEnd of stream, returning ...\n");
@@ -82,7 +85,8 @@ void handle_client(int client_socket) {
         printf("%c", input);
 
         // check if we terminate
-        if (input == 'q') {
+        if (input == 'q')
+        {
             keep_going = FALSE;
         }
 
@@ -92,10 +96,12 @@ void handle_client(int client_socket) {
     }
 
     // cleanup
-    if (close(client_socket) == -1) {
+    if (close(client_socket) == -1)
+    {
         perror("Error closing socket");
-        exit(EXIT_FAILURE);
-    } else {
+        pthread_exit(EXIT_FAILURE);
+    } else
+    {
         printf("\nClosed socket to client, exit");
     }
 }
