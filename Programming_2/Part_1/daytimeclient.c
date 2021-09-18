@@ -16,9 +16,9 @@ int main() {
     client_socket = socket(AF_INET, SOCK_STREAM, 0);
     // create addr struct
     server_address.sin_family = AF_INET;
-    server_address.sin_addr.s_addr = inet_addr(SERVER_ADDR);
     // getting the string of the ip of server, given SERVER_ADDR
-    //time_server_ip = inet_ntoa((struct in_addr)(gethostbyname(SERVER_ADDR)->h_addr_list[0]));
+    time_server_ip = inet_ntoa((struct in_addr)(gethostbyname(SERVER_ADDR)->h_addr_list[0]));
+    server_address.sin_addr.s_addr = inet_addr(time_server_ip);
     server_address.sin_port = htons(PORT);
 
     // connect to server socket
