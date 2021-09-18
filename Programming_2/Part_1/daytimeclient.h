@@ -22,5 +22,5 @@
 /************************************************************************
  * preprocessor directives
  ************************************************************************/
-#define SERVER_ADDR "132.163.96.2" // time server ip
+#define SERVER_ADDR "time.nist.gov" // time server ip
 #define PORT 13         // port the server will listen on
