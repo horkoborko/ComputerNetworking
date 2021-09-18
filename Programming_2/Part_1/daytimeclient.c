@@ -4,9 +4,9 @@
  * MAIN
  ************************************************************************/
 int main() {
-    char input[100];                    // buffer for user input
+    char input[100];              // buffer for user input
     int client_socket;            // client side socket
-    // char* time_server_ip;
+    char* time_server_ip;
     struct sockaddr_in server_address;  // client socket naming struct
     char c;
 
