@@ -21,5 +21,5 @@
 /************************************************************************
  * preprocessor directives
  ************************************************************************/
-#define SERVER_ADDR "129.6.15.28" // time server ip
+#define SERVER_ADDR "132.163.96.2" // time server ip
 #define PORT 13         // port the server will listen on
