@@ -1,16 +1,15 @@
 #include "server.h"
-#include "client.h"
 
 /************************************************************************
  * MAIN
  ************************************************************************/
 int main() {
-    //char input[100];                    // buffer for user input
+    char input[100];                    // buffer for user input
     int client_socket;                  // client side socket
     struct sockaddr_in client_address;  // client socket naming struct
     char c;
     
-    printf("Daytime client\n");
+    printf("Echo client\n");
     
     // create an unnamed socket, and then name it
     client_socket = socket(AF_INET, SOCK_STREAM, 0);
@@ -26,24 +25,24 @@ int main() {
     }
     
     while (TRUE) {
-        //printf("Input: ");
+        printf("Input: ");
         // read string
-        //fgets(input, sizeof(input), stdin);
+        fgets(input, sizeof(input), stdin);
         
-        //int i = 0;
-        //while (*(input + i)) {
+        int i = 0;
+        while (*(input + i)) {
             // make the request to the server
-            write(client_socket, 49, sizeof(char));
+            write(client_socket, input + i, sizeof(char));
             // get the result
             read(client_socket, &c, sizeof(char));
-            if (c == '*') {
+            if (c == 'q') {
                 close(client_socket);
                 printf("\nDone!\n");
                 exit(EXIT_SUCCESS);
             }
             printf("%c", c);
-            //i++;
-        //}
+            i++;
+        }
     }
     
     return EXIT_SUCCESS;

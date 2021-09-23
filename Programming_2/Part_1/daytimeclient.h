@@ -11,6 +11,7 @@
 #include <arpa/inet.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
+#include <netdb.h>
 #include <signal.h>
 
 // read/write/close
@@ -19,19 +20,7 @@
 #include <unistd.h>
 
 /************************************************************************
- * function prototype declarations
- ************************************************************************/
-void handle_client(int client_socket);
-
-/************************************************************************
  * preprocessor directives
  ************************************************************************/
-#define SERVER_ADDR "127.0.0.1" // time server ip
-#define PORT 23657          // port the server will listen on
-
-// I cannot let go of the old-fashioned way :) - for readability ...
-#define FALSE false
-#define TRUE !false
-
-// number of pending connections in the connection queue
-#define NUM_CONNECTIONS 1
+#define SERVER_ADDR "time.nist.gov" // time server ip
+#define PORT 13         // port the server will listen on
