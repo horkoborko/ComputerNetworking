@@ -6,9 +6,6 @@ LFLAGS = -Wall -std=c99 -pedantic $(DEBUG)
 client : client.c
 	$(CC) $(LFLAGS) client.c -o client
 
-server : server.c 
-	$(CC) $(LFLAGS) -lpthread server.c -o server
-
 
 clean:
 	rm /*.o
