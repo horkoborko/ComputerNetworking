@@ -114,16 +114,22 @@ class Worker extends Thread implements HttpConstants {
       }
 
     } finally {
+      // return steps from 3A+1 algorithm
+      ps.write(ThreeAPlusOne(r));
       socket.close();
     }
 
   }
 
+  /*
+   * Takes an Integer input and applies the 3A+1 algorithm to reduce input to 1 &
+   * return the steps it takes
+   */
   int ThreeAPlusOne(int InputStream) {
     int inputInt = InputStream;
     int algortihmCounter = 0;
 
-    while (inputInt != 0) {
+    while (inputInt != 1) {
       if (inputInt % 2 == 0) {
         inputInt = inputInt / 2;
       } else {
