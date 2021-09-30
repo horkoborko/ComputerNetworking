@@ -1,4 +1,4 @@
-package web;
+//package web;
 
 import java.io.*;
 import java.net.*;
@@ -30,7 +30,7 @@ class WebServer {
 
     // default constructor
     WebServer() {}
-        
+
     // print to stdout
     protected static void print(String s) {
         System.out.println(s);
@@ -43,17 +43,17 @@ class WebServer {
             log.flush();
         }
     }
-    
+
     // load properties from directory config
     static void loadProps() throws IOException {
         String fileString = System.getProperty("user.dir") + File.separator + "config" + File.separator + "www-server.properties";
         File file = new File(fileString);
-        
+
         if (file.exists()) {
             InputStream propertiesInputStream = new BufferedInputStream(new FileInputStream(file));
             properties.load(propertiesInputStream);
             propertiesInputStream.close();
-            
+
             String propertyString = properties.getProperty("root");
             if (propertyString != null) {
                 root = new File(propertyString);
@@ -61,7 +61,7 @@ class WebServer {
                     throw new Error(root + " doesn't exist");
                 }
             }
-            
+
             propertyString = properties.getProperty("timeout");
             if (propertyString != null) {
                 timeout = Integer.parseInt(propertyString);
@@ -83,7 +83,7 @@ class WebServer {
                 log = new PrintStream(new BufferedOutputStream(
                         new FileOutputStream(propertyString)));
             } else {
-                log = System.out;                
+                log = System.out;
             }
         }
     }
@@ -94,7 +94,7 @@ class WebServer {
         print("timeout=" + timeout);
         print("workers=" + workers);
     }
-     
+
     synchronized void workerHasStarted() {
         notify();
     }

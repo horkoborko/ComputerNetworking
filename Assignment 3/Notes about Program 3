@@ -1,0 +1,3 @@
+NOTES:
+
+-HttpConstants can be removed once the semantics are modified to accomodate our task
