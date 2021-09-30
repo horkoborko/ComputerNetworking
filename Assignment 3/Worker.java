@@ -101,24 +101,25 @@ class Worker extends Thread implements HttpConstants {
                 }
             }
 
-            /* are we doing a GET or just a HEAD */
-            boolean doingGet;
             /* beginning of file name */
             int index;
-            if (buffer[0] == (byte) 'G'
-                    && buffer[1] == (byte) 'E'
-                    && buffer[2] == (byte) 'T'
-                    && buffer[3] == (byte) ' ') {
-                doingGet = true;
-                index = 4;
-            } else if (buffer[0] == (byte) 'H'
-                    && buffer[1] == (byte) 'E'
-                    && buffer[2] == (byte) 'A'
-                    && buffer[3] == (byte) 'D'
-                    && buffer[4] == (byte) ' ') {
-                doingGet = false;
-                index = 5;
-            } else {
+
+            /* beginning of 3A+1 logic */
+            /* not sure of where variable name for the client-inputted number would be */
+            while(/*VAR*/ != 0) {
+              if(/*VAR*/ == 2) {
+                /*VAR*/ / 2;
+              }
+              else {
+                3 * /*VAR*/ + 1;
+              }
+              ps.print(/*VAR*/);
+              ps.write(buffer, 0, 5);
+              ps.write(EOL);
+              ps.flush();
+              socket.close();
+              return;
+            }
                 /* we don't support this method */
                 ps.print("HTTP/1.0 " + HTTP_BAD_METHOD
                         + " unsupported method type: ");
