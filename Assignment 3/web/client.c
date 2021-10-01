@@ -8,6 +8,8 @@ int main() {
     int client_socket;                  // client side socket
     struct sockaddr_in client_address;  // client socket naming struct
     int number;
+    int numberToPass;
+    int recievedNum;
 
     printf("Echo client\n");
 
@@ -29,18 +31,31 @@ int main() {
         // read string
         fgets(input, sizeof(input), stdin);
 
-        int i = 0;
-        // make the request to the server
-        write(client_socket, input + i, sizeof(char));
-        // get the result
-        read(client_socket, &number, sizeof(char));
-        if (number == 'q') {
+        if (strcmp(input, "q") == 0) {
             close(client_socket);
             printf("\nDone!\n");
             exit(EXIT_SUCCESS);
          }
-         printf("%c", number);
-         i++;
+
+        number = Integer.parseInt(input);
+        numberToPass = htonl(number);
+
+        // make the request to the server
+        write(client_socket, &numberToPass, sizeof(int));
+        // check for invalid input
+        if (number < 1)
+          {
+            close(client_socket);
+            printf("\nInvalid number\n");
+            exit(EXIT_FAILURE);
+          }
+        // get the result
+        read(client_socket, &recievedNum, sizeof(int));
+
+        printf("Steps taken: %d\n", recievedNum);
+
+        close(client_socket);
+        exit(EXIT_SUCCESS);
 
     }
 
