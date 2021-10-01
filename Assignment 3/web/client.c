@@ -7,7 +7,7 @@ int main() {
     char input[100];                    // buffer for user input
     int client_socket;                  // client side socket
     struct sockaddr_in client_address;  // client socket naming struct
-    char c;
+    int number;
 
     printf("Echo client\n");
 
@@ -30,19 +30,18 @@ int main() {
         fgets(input, sizeof(input), stdin);
 
         int i = 0;
-        while (*(input + i)) {
-            // make the request to the server
-            write(client_socket, input + i, sizeof(char));
-            // get the result
-            read(client_socket, &c, sizeof(char));
-            if (c == 'q') {
-                close(client_socket);
-                printf("\nDone!\n");
-                exit(EXIT_SUCCESS);
-            }
-            printf("%c", c);
-            i++;
-        }
+        // make the request to the server
+        write(client_socket, input + i, sizeof(char));
+        // get the result
+        read(client_socket, &number, sizeof(char));
+        if (number == 'q') {
+            close(client_socket);
+            printf("\nDone!\n");
+            exit(EXIT_SUCCESS);
+         }
+         printf("%c", number);
+         i++;
+
     }
 
     return EXIT_SUCCESS;

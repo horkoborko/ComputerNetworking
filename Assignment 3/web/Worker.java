@@ -86,7 +86,8 @@ class Worker extends Thread implements HttpConstants {
 
       // change this so it's actually calling ThreeAPlusOne
       charFromClient = fromClient.readInt();
-      toClient.write(ThreeAPlusOne(charFromClient));
+      int algorithmSteps = ThreeAPlusOne(charFromClient);
+      toClient.write(algorithmSteps);
 
    }
 
