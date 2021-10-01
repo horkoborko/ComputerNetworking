@@ -77,21 +77,16 @@ class Worker extends Thread implements HttpConstants {
    }
 
    void handleClient() throws IOException {
-      InputStream fromClient = new BufferedInputStream((DataInputStream) socket.getInputStream());
-      PrintStream toClient = new PrintStream((DataOutputStream) socket.getOutputStream());
+      InputStream fClient = new BufferedInputStream(socket.getInputStream());
+      PrintStream tClient = new PrintStream(socket.getOutputStream());
+      DataInputStream fromClient = new DataInputStream(fClient);
+      DataOutputStream toClient = new DataOutputStream(tClient);
+
       int charFromClient = 0;
 
       // change this so it's actually calling ThreeAPlusOne
       charFromClient = fromClient.readInt();
-      System.out.print((int) charFromClient);
-
-      // int state = 0;
-      boolean keepGoing = true;
-
-      // show that we are connected to client
-      System.out.println("A client connected ...");
-
-      socket.close();
+      toClient.write(ThreeAPlusOne(charFromClient));
 
    }
 
