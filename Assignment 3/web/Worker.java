@@ -77,16 +77,19 @@ class Worker extends Thread implements HttpConstants {
    }
 
    void handleClient() throws IOException {
+      // getting client in and outs
       InputStream fClient = new BufferedInputStream(socket.getInputStream());
       PrintStream tClient = new PrintStream(socket.getOutputStream());
       DataInputStream fromClient = new DataInputStream(fClient);
       DataOutputStream toClient = new DataOutputStream(tClient);
 
       int charFromClient = 0;
-
-      // change this so it's actually calling ThreeAPlusOne
+      System.out.print("Client connected.\n");
+      // converting client input to an int
       charFromClient = fromClient.readInt();
+      // call algorithm
       int algorithmSteps = ThreeAPlusOne(charFromClient);
+      // write it back to client
       toClient.write(algorithmSteps);
 
    }
@@ -108,7 +111,7 @@ class Worker extends Thread implements HttpConstants {
          algortihmCounter++;
       }
 
-      return algortihmCounter;
+      return algortihmCounter ;
    }
 
 }

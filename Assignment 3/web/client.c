@@ -37,7 +37,7 @@ int main() {
             exit(EXIT_SUCCESS);
          }
 
-        number = Integer.parseInt(input);
+        number = atoi(input);
         numberToPass = htonl(number);
 
         // make the request to the server
