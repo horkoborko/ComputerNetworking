@@ -77,55 +77,21 @@ class Worker extends Thread implements HttpConstants {
    }
 
    void handleClient() throws IOException {
-      DataInputStream fromClient = null;
-      DataOutputStream toClient = null;
-
+      InputStream fromClient = new BufferedInputStream((DataInputStream) socket.getInputStream());
+      PrintStream toClient = new PrintStream((DataOutputStream) socket.getOutputStream());
       int charFromClient = 0;
+
+      // change this so it's actually calling ThreeAPlusOne
+      charFromClient = fromClient.readInt();
+      System.out.print((int) charFromClient);
+
       // int state = 0;
       boolean keepGoing = true;
 
       // show that we are connected to client
       System.out.println("A client connected ...");
 
-      // first get the streams
-      try {
-         fromClient = new DataInputStream(socket.getInputStream());
-         toClient = new DataOutputStream(socket.getOutputStream());
-      } catch (IOException e) {
-         System.err.println("Error opening network streams");
-         return;
-      }
-
-      // now talk to the client
-      while (keepGoing) {
-         try {
-            charFromClient = fromClient.readByte();
-            System.out.print((char) charFromClient);
-         } catch (IOException e) {
-            System.err.println("Error reading character from client");
-            return;
-         }
-
-         try {
-            toClient.writeByte(charFromClient);
-         } catch (IOException e) {
-            System.err.println("Error writing character to client");
-            return;
-         }
-
-         if (charFromClient == 'q') {
-            System.out.println("\nBailing out!");
-            keepGoing = false;
-         }
-      }
-
-      try {
-         socket.close();
-         // change this so it's actually calling ThreeAPlusOne
-         System.out.print((int) charFromClient);
-      } catch (IOException e) {
-         System.err.println("Error closing socket to client");
-      }
+      socket.close();
 
    }
 
