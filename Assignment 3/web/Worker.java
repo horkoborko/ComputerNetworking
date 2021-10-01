@@ -121,6 +121,7 @@ class Worker extends Thread implements HttpConstants {
 
       try {
          socket.close();
+         // change this so it's actually calling ThreeAPlusOne
          System.out.print((int) charFromClient);
       } catch (IOException e) {
          System.err.println("Error closing socket to client");
