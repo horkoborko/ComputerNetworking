@@ -77,46 +77,53 @@ class Worker extends Thread implements HttpConstants {
    }
 
    void handleClient() throws IOException {
-      InputStream is = new BufferedInputStream(socket.getInputStream());
-      PrintStream ps = new PrintStream(socket.getOutputStream());
-      /*
-       * we will only block in read for this many milliseconds before we fail with
-       * java.io.InterruptedIOException, at which point we will abandon the
-       * connection.
-       */
-      socket.setSoTimeout(webServer.timeout); // we might not need this
-      socket.setTcpNoDelay(true);
-      /* zero out the buffer from last time */
-      for (int i = 0; i < BUF_SIZE; i++) {
-         buffer[i] = 0;
-      }
-      try {
-         /*
-          * We only support HTTP GET/HEAD, and don't support any fancy HTTP options, so
-          * we're only interested really in the first line.
-          */
-         int nread = 0, r = 0;
+      DataInputStream fromClient = null;
+      DataOutputStream toClient = null;
 
-         outerloop: while (nread < BUF_SIZE) {
-            r = is.read(buffer, nread, BUF_SIZE - nread);
-            if (r == -1) {
-               /* EOF */
-               return;
-            }
-            int i = nread;
-            nread += r;
-            for (; i < nread; i++) {
-               if (buffer[i] == (byte) '\n' || buffer[i] == (byte) '\r') {
-                  /* read one line */
-                  break outerloop;
-               }
-            }
+      int charFromClient = 0;
+      // int state = 0;
+      boolean keepGoing = true;
+
+      // show that we are connected to client
+      System.out.println("A client connected ...");
+
+      // first get the streams
+      try {
+         fromClient = new DataInputStream(socket.getInputStream());
+         toClient = new DataOutputStream(socket.getOutputStream());
+      } catch (IOException e) {
+         System.err.println("Error opening network streams");
+         return;
+      }
+
+      // now talk to the client
+      while (keepGoing) {
+         try {
+            charFromClient = fromClient.readByte();
+            System.out.print((char) charFromClient);
+         } catch (IOException e) {
+            System.err.println("Error reading character from client");
+            return;
          }
 
-      } finally {
-         // return steps from 3A+1 algorithm
-         ps.write(ThreeAPlusOne(r));
+         try {
+            toClient.writeByte(charFromClient);
+         } catch (IOException e) {
+            System.err.println("Error writing character to client");
+            return;
+         }
+
+         if (charFromClient == 'q') {
+            System.out.println("\nBailing out!");
+            keepGoing = false;
+         }
+      }
+
+      try {
          socket.close();
+         System.out.print((int) charFromClient);
+      } catch (IOException e) {
+         System.err.println("Error closing socket to client");
       }
 
    }
