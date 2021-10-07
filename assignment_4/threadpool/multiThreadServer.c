@@ -70,36 +70,21 @@ int main(int argc, char *argv[]) {
 void * handle_client(void *arg)
 {
     int client_socket = *( (int *) arg );
-    char input;
+    int input;
     int keep_going = true;
 
-    while (keep_going)
-    {
-        // read char from client
-        switch (read(client_socket, &input, sizeof(char)))
-        {
-            case 0:
-                keep_going = false;
-                printf("\nEnd of stream, returning ...\n");
-                break;
-            case -1:
-                perror("Error reading from network!\n");
-                keep_going = false;
-                break;
-        }
+    // read int from client
+    read(client_socket, &input, sizeof(int));
+    printf("Client connected.\n");
 
-        printf("%c", input);
+    // convert int from client
+    input = htonl(input);
 
-        // check if we terminate
-        if (input == 'q')
-        {
-            keep_going = FALSE;
-        }
+    // get number of steps
+    int algorithmSteps = ThreeAPlusOne(input);
 
-        // send result back to client
-        write(client_socket, &input, sizeof(char));
-
-    }
+    // send result back to client
+    write(client_socket, &algorithmSteps, sizeof(int));
 
     // cleanup
     if (close(client_socket) == -1)
@@ -114,3 +99,24 @@ void * handle_client(void *arg)
 
     return 0;
 }
+
+int ThreeAPlusOne(int input)
+  {
+    int inputInt = input;
+    int counter = 0;
+
+    while(inputInt != 1)
+    {
+      if(input % 2 == 0)
+      {
+        inputInt = inputInt / 2;
+      }
+      else
+      {
+        inputInt = 3 * inputInt + 1;
+      }
+      counter++;
+    }
+
+    return counter;
+  }

@@ -61,7 +61,8 @@ void three_a_plus_one_wrapper(void *number_ptr)
 {
     // original
     int number = *((int*)number_ptr);
-    int recievedNum;
+    int recievedNum, numberToPass;
+    //int taskAmount;
 
     int client_socket;                  // client side socket
     struct sockaddr_in client_address;  // client socket naming struct
@@ -79,8 +80,11 @@ void three_a_plus_one_wrapper(void *number_ptr)
         exit(EXIT_FAILURE);
     }
 
+    //taskAmount = atoi(number);
+    numberToPass = htonl(number);
+
     // make the request to the server
-    write(client_socket, &number, sizeof(int));
+    write(client_socket, &numberToPass, sizeof(int));
 
     // get the result
     read(client_socket, &recievedNum, sizeof(int));
