@@ -41,7 +41,6 @@ int main(int argc, char *argv[]) {
     // server loop
     while (true)
     {
-
         // accept connection to client
         if ((client_socket = accept(server_socket, NULL, NULL)) == -1)
         {
@@ -60,8 +59,12 @@ int main(int argc, char *argv[]) {
 
 
         }
-
+      // unlock mutex
+      pthread_mutex_unlock(&lock);
+      close(client_socket);
     }
+
+
 }
 
 
@@ -71,9 +74,9 @@ int main(int argc, char *argv[]) {
 
 void * handle_client(void *arg)
 {
-    // lock mutex
-    pthread_mutex_lock(&lock);
 
+  // lock mutex
+  pthread_mutex_lock(&lock);
     // initialize variables
     int client_socket = *( (int *) arg );
     int input;
@@ -96,16 +99,12 @@ void * handle_client(void *arg)
     if (close(client_socket) == -1)
     {
         perror("Error closing socket");
-        pthread_mutex_unlock(&lock);
         pthread_exit(NULL);
     }
     else
     {
         printf("\nClosed socket to client, exit");
     }
-
-    // unlock mutex
-    pthread_mutex_unlock(&lock);
 
     return 0;
 }
