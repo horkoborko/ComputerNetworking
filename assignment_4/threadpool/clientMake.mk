@@ -10,7 +10,7 @@ threadpool.o : threadpool.c
 	$(CC) $(CFLAGS) threadpool.c
 
 server : multiThreadServer.c
-	$(CC) $(LFLAGS) -lpthread multiThreadServer.c -o server
+	$(CC) $(LFLAGS) multiThreadServer.c -o server
 
 clean:
 	rm /*.o
