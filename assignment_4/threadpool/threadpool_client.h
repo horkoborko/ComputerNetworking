@@ -23,7 +23,7 @@ void three_a_plus_one_wrapper(void *number_ptr);
  * preprocessor directives
  ************************************************************************/
 #define SERVER_ADDR "127.0.0.1" // loopback ip address
-#define PORT 23657              // port the server will listen on
+#define PORT 23658              // port the server will listen on
 
 // number of pending connections in the connection queue
 #define NUM_CONNECTIONS 1

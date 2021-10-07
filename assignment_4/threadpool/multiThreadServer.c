@@ -12,6 +12,7 @@ int main(int argc, char *argv[]) {
     int client_socket;
     pthread_t thread;                  // create thread id
 
+    printf("Server started\n");
     // sent when ,client disconnected
     signal(SIGPIPE, SIG_IGN);
 
@@ -41,6 +42,8 @@ int main(int argc, char *argv[]) {
     // server loop
     while (true)
     {
+        // lock mutex
+        pthread_mutex_lock(&lock);
         // accept connection to client
         if ((client_socket = accept(server_socket, NULL, NULL)) == -1)
         {
@@ -54,17 +57,12 @@ int main(int argc, char *argv[]) {
               perror("Error creating thread");
             }
 
-            // detach tread
+            // detach the thread
             pthread_detach(thread);
 
 
         }
-      // unlock mutex
-      pthread_mutex_unlock(&lock);
-      close(client_socket);
     }
-
-
 }
 
 
@@ -75,8 +73,6 @@ int main(int argc, char *argv[]) {
 void * handle_client(void *arg)
 {
 
-  // lock mutex
-  pthread_mutex_lock(&lock);
     // initialize variables
     int client_socket = *( (int *) arg );
     int input;
@@ -84,6 +80,9 @@ void * handle_client(void *arg)
 
     // read int from client
     read(client_socket, &input, sizeof(int));
+    // unlock mutex
+    pthread_mutex_unlock(&lock);
+
     printf("Client connected.\n");
 
     // convert int from client
