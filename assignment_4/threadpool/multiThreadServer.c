@@ -1,5 +1,7 @@
 #include "multiThreadServer.h"
 
+// create global mutex lock
+pthread_mutex_t lock;
 /************************************************************************
  * MAIN
  ************************************************************************/
@@ -69,6 +71,10 @@ int main(int argc, char *argv[]) {
 
 void * handle_client(void *arg)
 {
+    // lock mutex
+    pthread_mutex_lock(&lock);
+
+    // initialize variables
     int client_socket = *( (int *) arg );
     int input;
     int keep_going = true;
@@ -90,12 +96,16 @@ void * handle_client(void *arg)
     if (close(client_socket) == -1)
     {
         perror("Error closing socket");
+        pthread_mutex_unlock(&lock);
         pthread_exit(NULL);
     }
     else
     {
         printf("\nClosed socket to client, exit");
     }
+
+    // unlock mutex
+    pthread_mutex_unlock(&lock);
 
     return 0;
 }
