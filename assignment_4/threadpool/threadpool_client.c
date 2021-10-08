@@ -47,7 +47,7 @@ int main() {
             threadpool_add_task(pool, task_copy_arguments, three_a_plus_one_wrapper, (void*)&taskAmount);
         }
 
-        close(client_socket);
+        //close(client_socket);
     }
 
     exit(EXIT_SUCCESS);
@@ -91,6 +91,8 @@ void three_a_plus_one_wrapper(void *number_ptr)
 
     // original
     printf("\nthread ID %p ----> %d: %d", pthread_self(), number, recievedNum);
+
+    close(client_socket);
 }
 
 

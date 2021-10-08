@@ -74,13 +74,14 @@ void * handle_client(void *arg)
 {
     // initialize variables
     int client_socket = *( (int *) arg );
+    // unlock mutex
+    pthread_mutex_unlock(&lock);
     int input;
     int keep_going = true;
 
     // read int from client
     read(client_socket, &input, sizeof(int));
-    // unlock mutex
-    pthread_mutex_unlock(&lock);
+
 
     printf("Client connected.\n");
 
