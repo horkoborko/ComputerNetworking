@@ -26,7 +26,7 @@ void three_a_plus_one_wrapper(void *number_ptr);
 #define PORT 23658              // port the server will listen on
 
 // number of pending connections in the connection queue
-#define NUM_CONNECTIONS 1
+#define NUM_CONNECTIONS 100
 
 #define NUMBER_TASKS 1000
 
