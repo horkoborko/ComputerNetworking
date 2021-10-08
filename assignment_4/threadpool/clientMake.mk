@@ -15,4 +15,4 @@ threadpool.o : threadpool.c
 
 
 clean:
-	rm /*.o
+	\rm *.o client
