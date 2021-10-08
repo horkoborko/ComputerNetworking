@@ -42,14 +42,15 @@ int main(int argc, char *argv[]) {
     // server loop
     while (true)
     {
-        // lock mutex
-        pthread_mutex_lock(&lock);
+
         // accept connection to client
         if ((client_socket = accept(server_socket, NULL, NULL)) == -1)
         {
             perror("Error accepting client");
         }else
         {
+            // lock mutex
+            pthread_mutex_lock(&lock);
             printf("\nAccepted client\n");
             //create new thread for every incoming client
             if(pthread_create( &thread, NULL, handle_client, &client_socket ) == -1)
@@ -72,7 +73,6 @@ int main(int argc, char *argv[]) {
 
 void * handle_client(void *arg)
 {
-
     // initialize variables
     int client_socket = *( (int *) arg );
     int input;
@@ -110,21 +110,18 @@ void * handle_client(void *arg)
 
 int ThreeAPlusOne(int input)
   {
-    int inputInt = input;
     int counter = 0;
+    int current = input;
 
-    while(inputInt != 1)
+    while (current != 1)
     {
-      if(input % 2 == 0)
-      {
-        inputInt = inputInt / 2;
-      }
-      else
-      {
-        inputInt = 3 * inputInt + 1;
-      }
-      counter++;
+        counter++;
+        if (current % 2) {
+            current = (current*3) + 1;
+        }
+        else {
+            current >>= 1;
+        }
     }
-
     return counter;
   }
