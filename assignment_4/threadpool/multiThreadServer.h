@@ -37,4 +37,4 @@ void * handle_client(void *arg);
 #define TRUE !false
 
 // number of pending connections in the connection queue
-#define NUM_CONNECTIONS 1
+#define NUM_CONNECTIONS 100

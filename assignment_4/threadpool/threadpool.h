@@ -8,7 +8,7 @@
 #include "dbg.h"
 
 // maximum number of threads allowed in a pool
-#define THREADS_IN_POOL 30
+#define THREADS_IN_POOL 10
 
 // structure represent tasks
 typedef struct task_st {
