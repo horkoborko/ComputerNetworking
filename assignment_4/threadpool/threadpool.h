@@ -8,7 +8,11 @@
 #include "dbg.h"
 
 // maximum number of threads allowed in a pool
+<<<<<<< HEAD
 #define THREADS_IN_POOL 10
+=======
+#define THREADS_IN_POOL 100
+>>>>>>> parent of 3ebbdb3 (Somewhat working now)
 
 // structure represent tasks
 typedef struct task_st {
