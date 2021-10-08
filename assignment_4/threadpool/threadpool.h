@@ -10,6 +10,7 @@
 // maximum number of threads allowed in a pool
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 #define THREADS_IN_POOL 10
 =======
 #define THREADS_IN_POOL 100
@@ -17,6 +18,9 @@
 =======
 #define THREADS_IN_POOL 30
 >>>>>>> parent of 4bb40a2 (Merge branch 'main' of https://github.com/horkoborko/CS460 into main)
+=======
+#define THREADS_IN_POOL 30
+>>>>>>> parent of 4fc36f7 (numberssss)
 
 // structure represent tasks
 typedef struct task_st {
