@@ -11,6 +11,7 @@
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 #define THREADS_IN_POOL 10
 =======
 #define THREADS_IN_POOL 100
@@ -18,6 +19,9 @@
 =======
 #define THREADS_IN_POOL 30
 >>>>>>> parent of 4bb40a2 (Merge branch 'main' of https://github.com/horkoborko/CS460 into main)
+=======
+#define THREADS_IN_POOL 30
+>>>>>>> parent of 4fc36f7 (numberssss)
 =======
 #define THREADS_IN_POOL 30
 >>>>>>> parent of 4fc36f7 (numberssss)
