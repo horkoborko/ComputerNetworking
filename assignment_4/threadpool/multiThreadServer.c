@@ -18,7 +18,7 @@ int main(int argc, char *argv[]) {
 
     // create unnamed network socket for server to listen on
     if ((server_socket = socket(AF_INET, SOCK_STREAM, 0)) == -1) {
-        perror("Error creating socket");
+        perror("Error creating socket\n");
         exit(EXIT_FAILURE);
     }
 
@@ -29,13 +29,13 @@ int main(int argc, char *argv[]) {
 
     // binding unnamed socket to a particular port
     if (bind(server_socket, (struct sockaddr *)&server_address, sizeof(server_address)) == -1) {
-        perror("Error binding socket");
+        perror("Error binding socket\n");
         exit(EXIT_FAILURE);
     }
 
     // listen for client connections (pending connections get put into a queue)
     if (listen(server_socket, NUM_CONNECTIONS) == -1) {
-        perror("Error listening on socket");
+        perror("Error listening on socket\n");
         exit(EXIT_FAILURE);
     }
 
@@ -45,16 +45,16 @@ int main(int argc, char *argv[]) {
         // accept connection to client
         if ((client_socket = accept(server_socket, NULL, NULL)) == -1)
         {
-            perror("Error accepting client");
+            perror("Error accepting client\n");
         }else
         {
             // lock mutex
             pthread_mutex_lock(&lock);
-            printf("\nAccepted client\n");
+            printf("Accepted client\n");
             //create new thread for every incoming client
             if(pthread_create( &thread, NULL, handle_client, &client_socket ) == -1)
             {
-              perror("Error creating thread");
+              perror("Error creating thread\n");
             }
 
             // detach the thread
@@ -97,12 +97,12 @@ void * handle_client(void *arg)
     // cleanup
     if (close(client_socket) == -1)
     {
-        perror("Error closing socket");
+        perror("Error closing socket\n");
         pthread_exit(NULL);
     }
     else
     {
-        printf("\nClosed socket to client, exit");
+        printf("\nClosed socket to client, exit\n");
     }
 
     return 0;

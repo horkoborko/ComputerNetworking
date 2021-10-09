@@ -90,7 +90,7 @@ void three_a_plus_one_wrapper(void *number_ptr)
     read(client_socket, &recievedNum, sizeof(int));
 
     // original
-    printf("\nthread ID %p ----> %d: %d", pthread_self(), number, recievedNum);
+    printf("thread ID %p ----> %d: %d\n", pthread_self(), number, recievedNum);
 
     close(client_socket);
 }
