@@ -28,7 +28,7 @@ void three_a_plus_one_wrapper(void *number_ptr);
 // number of pending connections in the connection queue
 #define NUM_CONNECTIONS 1
 
-#define NUMBER_TASKS 10
+#define NUMBER_TASKS 100000
 
 #define FALSE 0
 #define TRUE !FALSE

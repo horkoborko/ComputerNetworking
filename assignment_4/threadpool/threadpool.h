@@ -9,7 +9,7 @@
 
 // maximum number of threads allowed in a pool
 
-#define THREADS_IN_POOL 10
+#define THREADS_IN_POOL 30
 
 
 // structure represent tasks

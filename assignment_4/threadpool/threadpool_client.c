@@ -30,8 +30,8 @@ int main() {
     //     exit(EXIT_FAILURE);
     // }
 
-    while (TRUE)
-    {
+    //while (TRUE)
+    //{
         // // make the request to the server
         // write(client_socket, &numberToPass, sizeof(int));
         //
@@ -46,9 +46,9 @@ int main() {
             // in each loop, execute three_a_plus_one_wrapper in a thread from the pool
             threadpool_add_task(pool, task_copy_arguments, three_a_plus_one_wrapper, (void*)&taskAmount);
         }
-
+        sleep(200);
         //close(client_socket);
-    }
+    //}
 
     exit(EXIT_SUCCESS);
 }
