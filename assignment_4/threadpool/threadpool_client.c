@@ -17,38 +17,13 @@ int main() {
 
     printf("stress client\n");
 
-    // // create an unnamed socket, and then name it
-    // client_socket = socket(AF_INET, SOCK_STREAM, 0);
-    // // create addr struct
-    // client_address.sin_family = AF_INET;
-    // client_address.sin_addr.s_addr = inet_addr(SERVER_ADDR);
-    // client_address.sin_port = htons(PORT);
-    //
-    // // connect to server socket
-    // if (connect(client_socket, (struct sockaddr *)&client_address, sizeof(client_address)) == -1) {
-    //     perror("Error connecting to server!\n");
-    //     exit(EXIT_FAILURE);
-    // }
-
-    //while (TRUE)
-    //{
-        // // make the request to the server
-        // write(client_socket, &numberToPass, sizeof(int));
-        //
-        // // get the result
-        // read(client_socket, &recievedNum, sizeof(int));
-        //
-        // printf("Steps taken: %d\n", recievedNum);
-
 
         for (taskAmount=1; taskAmount<=NUMBER_TASKS; taskAmount++)
         {
             // in each loop, execute three_a_plus_one_wrapper in a thread from the pool
             threadpool_add_task(pool, task_copy_arguments, three_a_plus_one_wrapper, (void*)&taskAmount);
         }
-        sleep(200);
-        //close(client_socket);
-    //}
+        sleep(420);
 
     exit(EXIT_SUCCESS);
 }
