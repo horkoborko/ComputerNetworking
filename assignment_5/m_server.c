@@ -85,9 +85,6 @@ void * handle_client(void *arg)
     // read int from client
     read(client_socket, &input, sizeof(int));
 
-
-    printf("Client connected.\n");
-
     // convert int from client
     input = htonl(input);
 
