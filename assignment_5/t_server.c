@@ -74,11 +74,14 @@ int main(int argc, char *argv[]) {
                // print out client being opened
                printf("Socket number of client opened: %d\n", client_socket);
 
+               printf("Num of threads before add task: %d\n", numThreads);
+
                //create new threadpool for every incoming task
                threadpool_add_task(tpool, task_copy_arguments, handle_client, (void *)&numThreads);
 
             }else{numThreads --;}
         }
+        sleep(500);
     }
 }
 
@@ -94,7 +97,7 @@ void handle_client(void *arg)
 
     // initialize variables
     int client_socket = *( (int *) arg );
-
+    printf("Num of Threads: %d\n", numThreads );
     // decrease number of threads
     numThreads --;
 
@@ -116,7 +119,7 @@ void handle_client(void *arg)
     write(client_socket, &algorithmSteps, sizeof(int));
 
     // print out info
-    printf("number recieved from client:%d\n", input, algorithmSteps);
+    printf("number recieved from client:%d\n", input);
     printf("number of steps sent back: %d\n", algorithmSteps);
 
     // cleanup
