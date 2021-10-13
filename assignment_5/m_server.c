@@ -50,7 +50,10 @@ int main(int argc, char *argv[]) {
         {
             // lock mutex
             pthread_mutex_lock(&lock);
-            printf("Accepted client\n");
+
+            // print out client being opened
+            printf("Socket number of client opened: %d\n", client_socket);
+
             //create new thread for every incoming client
             if(pthread_create( &thread, NULL, handle_client, &client_socket ) == -1)
             {
@@ -94,7 +97,9 @@ void * handle_client(void *arg)
     // send result back to client
     write(client_socket, &algorithmSteps, sizeof(int));
 
-    printf("number:%d ----------> steps:%d\n", input, algorithmSteps);
+    // print out info
+    printf("number recieved from client:%d\n", input, algorithmSteps);
+    printf("number of steps sent back: %d\n", algorithmSteps);
 
     // cleanup
     if (close(client_socket) == -1)
@@ -104,7 +109,8 @@ void * handle_client(void *arg)
     }
     else
     {
-        printf("\nClosed socket to client, exit\n");
+      // print out client being closed
+      printf("Socket number of client closing: %d\n", client_socket);
     }
 
     return 0;

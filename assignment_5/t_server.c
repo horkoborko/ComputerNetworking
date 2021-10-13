@@ -1,18 +1,23 @@
 #include "t_server.h"
-#include "threadpool.c"
+#include "threadpool.h"
 #include <pthread.h>
 
 // create global mutex lock
 pthread_mutex_t lock;
+
+// create global max num of threads
+int MAX_THREADS = 30;
+
+// create global num of threads var
+int numThreads = 0;
 /************************************************************************
  * MAIN
  ************************************************************************/
 
 int main(int argc, char *argv[]) {
     int server_socket;                 // descriptor of server socket
-    int numThreads;
     int client_socket;
-    int MAX_THREADS = 30;
+
 
     struct sockaddr_in server_address; // for naming the server's listening socket
     pthread_t thread;                  // create thread id
@@ -46,6 +51,9 @@ int main(int argc, char *argv[]) {
         exit(EXIT_FAILURE);
     }
 
+    //init mutex
+    pthread_mutex_init(&lock, NULL);
+
     // server loop
     while (true)
     {
@@ -63,7 +71,8 @@ int main(int argc, char *argv[]) {
                // increase thread number
                numThreads ++;
 
-               printf("Accepted client\n");
+               // print out client being opened
+               printf("Socket number of client opened: %d\n", client_socket);
 
                //create new threadpool for every incoming task
                threadpool_add_task(tpool, task_copy_arguments, handle_client, (void *)&numThreads);
@@ -78,7 +87,7 @@ int main(int argc, char *argv[]) {
  * handle client
  ************************************************************************/
 
-void * handle_client(void *arg)
+void handle_client(void *arg)
 {
     int input;
     int keep_going = true;
@@ -86,7 +95,9 @@ void * handle_client(void *arg)
     // initialize variables
     int client_socket = *( (int *) arg );
 
+    // decrease number of threads
     numThreads --;
+
     // unlock mutex
     pthread_mutex_unlock(&lock);
 
@@ -104,7 +115,9 @@ void * handle_client(void *arg)
     // send result back to client
     write(client_socket, &algorithmSteps, sizeof(int));
 
-    printf("number:%d ----------> steps:%d\n", input, algorithmSteps);
+    // print out info
+    printf("number recieved from client:%d\n", input, algorithmSteps);
+    printf("number of steps sent back: %d\n", algorithmSteps);
 
     // cleanup
     if (close(client_socket) == -1)
@@ -114,10 +127,11 @@ void * handle_client(void *arg)
     }
     else
     {
-        printf("\nClosed socket to client, exit\n");
+      // print out client being closed
+      printf("Socket number of client closing: %d\n", client_socket);
     }
 
-    return 0;
+    //return 0;
 }
 
 int ThreeAPlusOne(int input)
@@ -137,3 +151,16 @@ int ThreeAPlusOne(int input)
     }
     return counter;
   }
+
+/* ******************************************************* */
+/* prepare arguments for thread function                   */
+/* ******************************************************* */
+void *task_copy_arguments(void *args_in)
+{
+    void *args_out;
+
+    args_out = malloc(sizeof(int));
+    *((int*)args_out) = *((int*)args_in);
+
+    return args_out;
+}

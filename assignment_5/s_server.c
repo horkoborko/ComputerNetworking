@@ -45,7 +45,8 @@ int main(int argc, char *argv[]) {
             perror("Error accepting client\n");
         }else
         {
-            printf("Accepted client\n");
+            // print out client being opened
+            printf("Socket number of client opened: %d\n", client_socket);
             handle_client(&client_socket);
         }
     }
@@ -82,7 +83,8 @@ void * handle_client(void *arg)
     sleep(1);
 
     // print out info
-    printf("number:%d ----------> steps:%d\n", input, algorithmSteps);
+    printf("number recieved from client:%d\n", input, algorithmSteps);
+    printf("number of steps sent back: %d\n", algorithmSteps);
 
 
     //cleanup
@@ -93,7 +95,8 @@ void * handle_client(void *arg)
     }
     else
     {
-        printf("\nClosed socket to client, exit\n");
+      // print out client being closed
+      printf("Socket number of client closing: %d\n", client_socket);
     }
 
     return 0;

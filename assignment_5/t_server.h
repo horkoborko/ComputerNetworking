@@ -24,7 +24,9 @@
 /************************************************************************
  * function prototype declarations
  ************************************************************************/
-void * handle_client(void *arg);
+void handle_client(void *arg);
+int ThreeAPlusOne(int input);
+void *task_copy_arguments(void *args_in);
 
 /************************************************************************
  * preprocessor directives

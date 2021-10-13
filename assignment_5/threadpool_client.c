@@ -22,7 +22,7 @@ int main() {
             // in each loop, execute three_a_plus_one_wrapper in a thread from the pool
             threadpool_add_task(pool, task_copy_arguments, three_a_plus_one_wrapper, (void*)&taskAmount);
         }
-        //sleep(500);
+        sleep(500);
 
     exit(EXIT_SUCCESS);
 }
@@ -66,7 +66,7 @@ void three_a_plus_one_wrapper(void *number_ptr)
     // original
     printf("number:%d ----------> steps:%d\n", number, recievedNum);
 
-    sleep(500);
+    //sleep(500);
     close(client_socket);
 
 }
