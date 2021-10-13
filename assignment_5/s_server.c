@@ -1,7 +1,5 @@
 #include "s_server.h"
 
-// create global mutex lock
-pthread_mutex_t lock;
 /************************************************************************
  * MAIN
  ************************************************************************/
@@ -10,7 +8,6 @@ int main(int argc, char *argv[]) {
     int server_socket;                 // descriptor of server socket
     struct sockaddr_in server_address; // for naming the server's listening socket
     int client_socket;
-    pthread_t thread;                  // create thread id
 
     printf("Server started\n");
     // sent when ,client disconnected
@@ -48,19 +45,8 @@ int main(int argc, char *argv[]) {
             perror("Error accepting client\n");
         }else
         {
-            // lock mutex
-            pthread_mutex_lock(&lock);
             printf("Accepted client\n");
-            //create new thread for every incoming client
-            if(pthread_create( &thread, NULL, handle_client, &client_socket ) == -1)
-            {
-              perror("Error creating thread\n");
-            }
-
-            // detach the thread
-            pthread_detach(thread);
-
-
+            handle_client(&server_socket);
         }
     }
 }
@@ -74,8 +60,7 @@ void * handle_client(void *arg)
 {
     // initialize variables
     int client_socket = *( (int *) arg );
-    // unlock mutex
-    pthread_mutex_unlock(&lock);
+
     int input;
     int keep_going = true;
 
@@ -93,6 +78,8 @@ void * handle_client(void *arg)
 
     // send result back to client
     write(client_socket, &algorithmSteps, sizeof(int));
+
+    printf("number:%d ----------> steps:%d\n", input, algorithmSteps);
 
     // cleanup
     if (close(client_socket) == -1)

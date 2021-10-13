@@ -94,6 +94,8 @@ void * handle_client(void *arg)
     // send result back to client
     write(client_socket, &algorithmSteps, sizeof(int));
 
+    printf("number:%d ----------> steps:%d\n", input, algorithmSteps);
+
     // cleanup
     if (close(client_socket) == -1)
     {

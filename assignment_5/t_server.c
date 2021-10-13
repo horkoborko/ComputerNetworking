@@ -8,9 +8,14 @@ pthread_mutex_t lock;
 
 int main(int argc, char *argv[]) {
     int server_socket;                 // descriptor of server socket
-    struct sockaddr_in server_address; // for naming the server's listening socket
+    int numThreads;
     int client_socket;
+    int MAX_THREADS = 30;
+
+    struct sockaddr_in server_address; // for naming the server's listening socket
     pthread_t thread;                  // create thread id
+
+    threadpool tpool = threadpool_create();
 
     printf("Server started\n");
     // sent when ,client disconnected
@@ -48,19 +53,20 @@ int main(int argc, char *argv[]) {
             perror("Error accepting client\n");
         }else
         {
-            // lock mutex
-            pthread_mutex_lock(&lock);
-            printf("Accepted client\n");
-            //create new thread for every incoming client
-            if(pthread_create( &thread, NULL, handle_client, &client_socket ) == -1)
+            if( numThreads < MAX_THREADS )
             {
-              perror("Error creating thread\n");
-            }
+               // lock mutex
+               pthread_mutex_lock(&lock);
 
-            // detach the thread
-            pthread_detach(thread);
+               // increase thread number
+               numThreads ++;
 
+               printf("Accepted client\n");
 
+               //create new threadpool for every incoming task
+               threadpool_add_task(tpool, task_copy_arguments, handle_client, (void *)&numThreads);
+
+            }else{numThreads --;}
         }
     }
 }
@@ -72,16 +78,18 @@ int main(int argc, char *argv[]) {
 
 void * handle_client(void *arg)
 {
-    // initialize variables
-    int client_socket = *( (int *) arg );
-    // unlock mutex
-    pthread_mutex_unlock(&lock);
     int input;
     int keep_going = true;
 
+    // initialize variables
+    int client_socket = *( (int *) arg );
+
+    numThreads --;
+    // unlock mutex
+    pthread_mutex_unlock(&lock);
+
     // read int from client
     read(client_socket, &input, sizeof(int));
-
 
     printf("Client connected.\n");
 
@@ -93,6 +101,8 @@ void * handle_client(void *arg)
 
     // send result back to client
     write(client_socket, &algorithmSteps, sizeof(int));
+
+    printf("number:%d ----------> steps:%d\n", input, algorithmSteps);
 
     // cleanup
     if (close(client_socket) == -1)
