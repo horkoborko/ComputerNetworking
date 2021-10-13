@@ -1,5 +1,6 @@
-#include "m_server.h"
+#include "t_server.h"
 #include "threadpool.c"
+#include <pthread.h>
 
 // create global mutex lock
 pthread_mutex_t lock;
