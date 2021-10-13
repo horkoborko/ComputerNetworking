@@ -46,7 +46,7 @@ int main(int argc, char *argv[]) {
         }else
         {
             printf("Accepted client\n");
-            handle_client(&server_socket);
+            handle_client(&client_socket);
         }
     }
 }
@@ -79,13 +79,17 @@ void * handle_client(void *arg)
     // send result back to client
     write(client_socket, &algorithmSteps, sizeof(int));
 
+    sleep(1);
+
+    // print out info
     printf("number:%d ----------> steps:%d\n", input, algorithmSteps);
 
-    // cleanup
+
+    //cleanup
     if (close(client_socket) == -1)
     {
         perror("Error closing socket\n");
-        pthread_exit(NULL);
+        exit(EXIT_FAILURE);
     }
     else
     {
