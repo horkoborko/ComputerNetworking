@@ -97,7 +97,7 @@ void handle_client(void *arg)
 
     // initialize variables
     int client_socket = *( (int *) arg );
-    
+
     // decrease number of threads
     numThreads --;
 
@@ -129,7 +129,7 @@ void handle_client(void *arg)
     else
     {
       // print out client being closed
-      printf("Socket number of client closing: %d\n", client_socket);
+      printf("Socket number of client closing: %d\n\n", client_socket);
     }
 
     //return 0;
