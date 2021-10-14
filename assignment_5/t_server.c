@@ -97,7 +97,7 @@ void handle_client(void *arg)
 
     // initialize variables
     int client_socket = *( (int *) arg );
-    printf("Num of Threads: %d\n", numThreads );
+    
     // decrease number of threads
     numThreads --;
 
