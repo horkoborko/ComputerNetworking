@@ -74,15 +74,15 @@ int main(int argc, char *argv[]) {
                // print out client being opened
                printf("Socket number of client opened: %d\n", client_socket);
 
-               printf("Num of threads before add task: %d\n", numThreads);
-
                //create new threadpool for every incoming task
-               threadpool_add_task(tpool, task_copy_arguments, handle_client, (void *)&numThreads);
+               threadpool_add_task(tpool, task_copy_arguments, handle_client, (void *)&client_socket);
 
-            }else{numThreads --;}
+            }
+            else{numThreads --;}
         }
-        sleep(500);
+
     }
+    sleep(500);
 }
 
 
