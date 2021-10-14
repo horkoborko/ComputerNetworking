@@ -80,7 +80,7 @@ void * handle_client(void *arg)
     sleep(1);
 
     // print out info
-    printf("number recieved from client:%d\n", input);
+    printf("number recieved from client: %d\n", input);
     printf("number of steps sent back: %d\n", algorithmSteps);
 
 
@@ -93,7 +93,7 @@ void * handle_client(void *arg)
     else
     {
       // print out client being closed
-      printf("Socket number of client closing: %d\n", client_socket);
+      printf("Socket number of client closing: %d\n\n", client_socket);
     }
 
     return 0;
