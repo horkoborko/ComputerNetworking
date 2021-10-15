@@ -77,13 +77,12 @@ void * handle_client(void *arg)
     // send result back to client
     write(client_socket, &algorithmSteps, sizeof(int));
 
-    sleep(1);
-
     // print out info
     printf("number recieved from client: %d\n", input);
     printf("number of steps sent back: %d\n", algorithmSteps);
 
 
+    sleep(.5);
     //cleanup
     if (close(client_socket) == -1)
     {

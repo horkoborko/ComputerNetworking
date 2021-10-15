@@ -64,7 +64,7 @@ void three_a_plus_one_wrapper(void *number_ptr)
     read(client_socket, &recievedNum, sizeof(int));
 
     // original
-    printf("number:%d ----------> steps:%d\n", number, recievedNum);
+    printf("Thread ID: %p number:%d ----------> steps:%d\n", pthread_self(), number, recievedNum);
 
     //sleep(500);
     close(client_socket);
