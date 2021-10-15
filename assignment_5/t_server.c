@@ -120,6 +120,7 @@ void handle_client(void *arg)
     printf("number recieved from client: %d\n", input);
     printf("number of steps sent back: %d\n", algorithmSteps);
 
+    sleep(.5);
     // cleanup
     if (close(client_socket) == -1)
     {
