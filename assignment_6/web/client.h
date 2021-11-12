@@ -37,4 +37,6 @@
 #define NUM_CONNECTIONS 1
 
 // create flags for operators
-enum operators{ADD, SUBTRACT, MULTIPLY, DIVIDE, RAISE, SQRT, INCORRECT_OP};
+typedef enum operators{
+  ADD, SUBTRACT, MULTIPLY, DIVIDE, RAISE, SQRT, INCORRECT_OP
+}operators;
