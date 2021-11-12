@@ -6,6 +6,7 @@
 #include <stdlib.h>
 #include <stdbool.h>
 #include <string.h>
+#include <ctype.h>
 
 // socket/bind/listen/accept
 #include <arpa/inet.h>
@@ -20,7 +21,7 @@
 /************************************************************************
  * function prototype declarations
  ************************************************************************/
-void handleClient();
+
 
 /************************************************************************
  * preprocessor directives
@@ -34,3 +35,6 @@ void handleClient();
 
 // number of pending connections in the connection queue
 #define NUM_CONNECTIONS 1
+
+// create flags for operators
+enum operators{ADD, SUBTRACT, MULTIPLY, DIVIDE, RAISE, SQRT, INCORRECT_OP};
