@@ -5,6 +5,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
+#include <math.h>
 #include <string.h>
 #include <ctype.h>
 #include <stdint.h>
@@ -19,10 +20,16 @@
 #include <sys/types.h>
 #include <unistd.h>
 
+#include <signal.h>
+
+//For Threading
+#include <pthread.h>
+
 /************************************************************************
  * function prototype declarations
  ************************************************************************/
-
+void * handle_client(void *arg);
+double doMath(int firstNumber, int operatorFlag, int secondNumber);
 
 /************************************************************************
  * preprocessor directives
@@ -36,8 +43,3 @@
 
 // number of pending connections in the connection queue
 #define NUM_CONNECTIONS 1
-
-// create flags for operators
-typedef enum operators{
-  ADD, SUBTRACT, MULTIPLY, DIVIDE, RAISE, SQRT, INCORRECT_OP
-}operators;

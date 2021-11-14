@@ -82,18 +82,18 @@ class Worker extends Thread implements HttpConstants {
       System.out.printf("firstNum: %d, secondNum: %d, operatorFlag: %d\n", firstNumber, secondNumber, operatorFlag);
 
       // call algorithm
-      int result = doMath(firstNumber, operatorFlag, secondNumber);
+      double result = doMath(firstNumber, operatorFlag, secondNumber);
 
-      System.out.printf("Result: %d\n", result);
+      System.out.printf("Result: %2.3f\n", result);
 
       // write it back to client
-      toClient.write(result);
+      toClient.writeDouble(result);
       System.out.printf("Completed client\n");
    }
 
-   int doMath(int firstNumber, int operatorFlag, int secondNumber)
+   double doMath(int firstNumber, int operatorFlag, int secondNumber)
    {
-      int result;
+      double result;
       if (operatorFlag == 0)
       {
          result = firstNumber + secondNumber;
@@ -108,18 +108,18 @@ class Worker extends Thread implements HttpConstants {
       }
       else if(operatorFlag == 3)
       {
-         result = firstNumber / secondNumber;
+         result = firstNumber / (double) secondNumber;
       }
       else if(operatorFlag == 4)
       {
-         result = (int)Math.pow(firstNumber, secondNumber);
+         result = Math.pow(firstNumber, secondNumber);
       }
       else
       {
-         result = (int)Math.sqrt(firstNumber);
+         result = Math.sqrt(firstNumber);
       }
 
-      return (short)result;
+      return result;
    }
 
 }

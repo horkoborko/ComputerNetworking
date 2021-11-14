@@ -8,4 +8,4 @@ client : client.c
 
 
 clean:
-	rm /*.o
+	\rm *.o client

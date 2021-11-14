@@ -4,13 +4,13 @@
  * MAIN
  ************************************************************************/
 int main() {
-    char input[100];
     char operator[100];
     char negChar;
+    double result;
     int client_socket;                 // client side socket
     struct sockaddr_in client_address;  // client socket naming struct
     int infoToPass[3]; // holds 1-2 numbers and a flag for operator
-    int firstNumber, secondNumber, result, operatorFlag;
+    int firstNumber, secondNumber, operatorFlag;
     bool firstNumberNeg = false;
 
 
@@ -30,15 +30,6 @@ int main() {
     }
 
     while (TRUE) {
-        // check user doesn't want to quit
-        printf("Input q if finished, press ENTER if not: ");
-        fgets(input, sizeof(input), stdin);
-        if (strcmp(input, "q") == 0) {
-            close(client_socket);
-            printf("\nClosing session of client\n");
-            exit(EXIT_SUCCESS);
-         }
-
         // get first number
         printf( "Input first number: ");
         // read string
@@ -144,18 +135,17 @@ int main() {
 
         // put in info and convert
         infoToPass[0] = htonl(firstNumber);
-        infoToPass[1] = htonl(secondNumber);
-        infoToPass[2] = htonl(operatorFlag);
+        infoToPass[1] = htonl(operatorFlag);
+        infoToPass[2] = htonl(secondNumber);
 
 
         // make the request to the server
         write(client_socket, &infoToPass, sizeof(infoToPass));
 
         // get the result
-        read(client_socket, &result, sizeof(short));
-        //result = htonl(result);
+        recv(client_socket, &result, sizeof(result), 0 );
 
-        printf("Result of math: %d\n", result);
+        printf("Result of math: %2.3f\n", result);
 
         close(client_socket);
         printf("\nClosing session of client\n");
