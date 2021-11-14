@@ -107,19 +107,19 @@ int main() {
           printf("Input second number: ");
           // read string
           scanf("%d", &secondNumber);
-        }
 
-        //get negative flag
-        printf("Would you like the number negative (Y/N)? ");
-        scanf(" %c", &negChar);
+          //get negative flag
+          printf("Would you like the number negative (Y/N)? ");
+          scanf(" %c", &negChar);
 
-        //convert to lowercase for ease of use
-        negChar = tolower(negChar);
+          //convert to lowercase for ease of use
+          negChar = tolower(negChar);
 
-        // assign negative flag
-        if (negChar == 'y')
-        {
-          secondNumber *= -1;
+          // assign negative flag
+          if (negChar == 'y')
+          {
+            secondNumber *= -1;
+          }
         }
 
         // real numbers will always occur with forcing input for the numbers to be ints
@@ -145,7 +145,7 @@ int main() {
         // put in info and convert
         infoToPass[0] = htonl(firstNumber);
         infoToPass[1] = htonl(secondNumber);
-        infoToPass[3] = operatorFlag;
+        infoToPass[2] = htonl(operatorFlag);
 
 
         // make the request to the server
@@ -153,6 +153,7 @@ int main() {
 
         // get the result
         read(client_socket, &result, sizeof(int));
+        //result = htonl(result);
 
         printf("Result of math: %d\n", result);
 

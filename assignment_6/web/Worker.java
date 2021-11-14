@@ -84,9 +84,11 @@ class Worker extends Thread implements HttpConstants {
       // call algorithm
       int result = doMath(firstNumber, operatorFlag, secondNumber);
 
+      System.out.printf("Result: %d\n", result);
+
       // write it back to client
       toClient.write(result);
-
+      System.out.printf("Completed client\n");
    }
 
    int doMath(int firstNumber, int operatorFlag, int secondNumber)
