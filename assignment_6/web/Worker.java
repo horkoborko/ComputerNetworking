@@ -91,9 +91,9 @@ class Worker extends Thread implements HttpConstants {
       System.out.printf("Completed client\n");
    }
 
-   int doMath(int firstNumber, int operatorFlag, int secondNumber)
+   short doMath(short firstNumber, short operatorFlag, short secondNumber)
    {
-      int result;
+      short result;
       if (operatorFlag == 0)
       {
          result = firstNumber + secondNumber;
@@ -112,11 +112,11 @@ class Worker extends Thread implements HttpConstants {
       }
       else if(operatorFlag == 4)
       {
-         result = (int)Math.pow(firstNumber, secondNumber);
+         result = (short)Math.pow(firstNumber, secondNumber);
       }
       else
       {
-         result = (int)Math.sqrt(firstNumber);
+         result = (short)Math.sqrt(firstNumber);
       }
 
       return result;

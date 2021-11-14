@@ -152,7 +152,7 @@ int main() {
         write(client_socket, &infoToPass, sizeof(infoToPass));
 
         // get the result
-        read(client_socket, &result, sizeof(int));
+        read(client_socket, &result, sizeof(short));
         //result = htonl(result);
 
         printf("Result of math: %d\n", result);
