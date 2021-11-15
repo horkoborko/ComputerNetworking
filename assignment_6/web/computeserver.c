@@ -115,7 +115,7 @@ void * handle_client(void *arg)
     }
     else
     {
-        printf("\nClosed socket to client, exit");
+        printf("\nClosed socket to client, exit\n");
     }
 
     return 0;

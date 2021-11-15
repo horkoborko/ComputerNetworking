@@ -4,6 +4,7 @@
  * MAIN
  ************************************************************************/
 int main() {
+    char input[100];
     char operator[100];
     char negChar;
     double result;
@@ -30,6 +31,15 @@ int main() {
     }
 
     while (TRUE) {
+        // check user doesn't want to quit
+        printf("Input q if finished, press ENTER if not: ");
+        fgets(input, sizeof(input), stdin);
+        if (strcmp(input, "q") == 0) {
+            close(client_socket);
+            printf("\nClosing session of client\n");
+            exit(EXIT_SUCCESS);
+         }
+
         // get first number
         printf( "Input first number: ");
         // read string
