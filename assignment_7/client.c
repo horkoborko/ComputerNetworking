@@ -9,7 +9,9 @@ int main() {
     char negChar;
     double result;
     int client_socket;                 // client side socket
-    struct sockaddr_in client_address;  // client socket naming struct
+    struct sockaddr_in server_address;  // client socket naming struct
+    socklen_t server_address_length = sizeof(server_address);
+    ssize_t bytes_received;
     int infoToPass[3]; // holds 1-2 numbers and a flag for operator
     int firstNumber, secondNumber, operatorFlag;
     bool firstNumberNeg = false;
@@ -17,18 +19,19 @@ int main() {
 
     printf("Compute client\n");
 
-    // create an unnamed socket, and then name it
-    client_socket = socket(AF_INET, SOCK_STREAM, 0);
-    // create addr struct
-    client_address.sin_family = AF_INET;
-    client_address.sin_addr.s_addr = inet_addr(SERVER_ADDR);
-    client_address.sin_port = htons(PORT);
-
-    // connect to server socket
-    if (connect(client_socket, (struct sockaddr *)&client_address, sizeof(client_address)) == -1) {
-        perror("Error connecting to server!\n");
+    // creating client datagram socket file descriptor
+    if ((client_socket = socket(AF_INET, SOCK_DGRAM, 0)) < 0)
+    {
+        perror("socket creation failed");
         exit(EXIT_FAILURE);
     }
+
+    memset(&server_address, 0, sizeof(server_address));
+
+    // create addr struct
+    server_address.sin_family = AF_INET;
+    server_address.sin_addr.s_addr = inet_addr(SERVER_ADDR);
+    server_address.sin_port = htons(PORT);
 
     while (TRUE) {
         // check user doesn't want to quit
@@ -102,7 +105,7 @@ int main() {
           exit(EXIT_SUCCESS);
         }
 
-        // get second
+        // get second number
         if ( operatorFlag != SQRT)
         {
           printf("Input second number: ");
@@ -150,10 +153,10 @@ int main() {
 
 
         // make the request to the server
-        write(client_socket, &infoToPass, sizeof(infoToPass));
+        sendto(client_socket, infoToPass, sizeof(infoToPass), 0, (struct sockaddr *) &server_address, server_address_length);
 
         // get the result
-        recv(client_socket, &result, sizeof(result), 0 );
+        recvfrom(client_socket, &result, sizeof(result), 0, (struct sockaddr *) &server_address, &server_address_length);
 
         printf("Result of math: %2.3f\n", result);
 

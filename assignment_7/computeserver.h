@@ -28,7 +28,7 @@
 /************************************************************************
  * function prototype declarations
  ************************************************************************/
-void * handle_client(void *arg);
+double handle_client( int recievedArray[] );
 double doMath(int firstNumber, int operatorFlag, int secondNumber);
 
 /************************************************************************
@@ -43,3 +43,8 @@ double doMath(int firstNumber, int operatorFlag, int secondNumber);
 
 // number of pending connections in the connection queue
 #define NUM_CONNECTIONS 1
+
+// create flags for operators
+typedef enum operators{
+  ADD=0, SUBTRACT, MULTIPLY, DIVIDE, RAISE, SQRT, INCORRECT_OP
+}operators;

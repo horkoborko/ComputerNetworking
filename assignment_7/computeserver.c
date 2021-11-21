@@ -1,70 +1,101 @@
 #include "computeserver.h"
 
-// create global mutex lock
-pthread_mutex_t lock;
+
 /************************************************************************
  * MAIN
  ************************************************************************/
 
-int main(int argc, char *argv[]) {
+int main() {
     int server_socket;                 // descriptor of server socket
     struct sockaddr_in server_address; // for naming the server's listening socket
-    int client_socket;
-    pthread_t thread;                  // create thread id
+    struct sockaddr client_address;
+    socklen_t client_address_length = sizeof(client_address);
+    ssize_t bytes_received;
 
-    printf("Compute Server started\n");
-    // sent when ,client disconnected
-    signal(SIGPIPE, SIG_IGN);
+    char *client_hello = "Server says hi";
+    int receivedArray[3];
+    double result;
+
 
     // create unnamed network socket for server to listen on
-    if ((server_socket = socket(AF_INET, SOCK_STREAM, 0)) == -1) {
-        perror("Error creating socket");
+    if ((server_socket = socket(AF_INET, SOCK_DGRAM, 0)) < 0) {
+        perror("Error creating socket\n");
         exit(EXIT_FAILURE);
     }
 
     // name the socket (making sure the correct network byte ordering is observed)
+    memset(&server_address, 0, sizeof(server_address));
     server_address.sin_family      = AF_INET;           // accept IP addresses
-    server_address.sin_addr.s_addr = htonl(INADDR_ANY); // accept clients on any interface
+    server_address.sin_addr.s_addr = INADDR_ANY; // accept clients on any interface
     server_address.sin_port        = htons(PORT);       // port to listen on
 
     // binding unnamed socket to a particular port
-    if (bind(server_socket, (struct sockaddr *)&server_address, sizeof(server_address)) == -1) {
-        perror("Error binding socket");
+    if (bind(server_socket, (struct sockaddr *)&server_address, sizeof(server_address)) < 0 ) {
+        perror("Error binding socket\n");
         exit(EXIT_FAILURE);
     }
 
-    // listen for client connections (pending connections get put into a queue)
-    if (listen(server_socket, NUM_CONNECTIONS) == -1) {
-        perror("Error listening on socket");
-        exit(EXIT_FAILURE);
-    }
 
     // server loop
     while (true)
     {
 
-        // accept connection to client
-        if ((client_socket = accept(server_socket, NULL, NULL)) == -1)
-        {
-            perror("Error accepting client");
-        }else
-        {
-            // lock mutex
-            pthread_mutex_lock(&lock);
-            printf("\nAccepted client\n");
-            //create new thread for every incoming client
-            if(pthread_create( &thread, NULL, handle_client, &client_socket ) == -1)
-            {
-              perror("Error creating thread");
-            }
+      printf( "Compute server started\n" );
+      // receive int array from *any* client
+      // client_addr will be filled in with addr info of where the data was received from
+      if ((bytes_received = recvfrom(server_socket,
+                                &receivedArray,
+                                sizeof(receivedArray), MSG_WAITALL,
+                                (struct sockaddr *) &client_address,
+                                &client_address_length )) == -1)
+      {
+          perror("error when trying recvfrom\n");
+      }
 
-            // detach tread
-            pthread_detach(thread);
+      printf( "Client equation: ");
+
+      // convert ints from client
+      receivedArray[0] = htonl(receivedArray[0]);
+      receivedArray[1] = htonl(receivedArray[1]);
+      receivedArray[2] = htonl(receivedArray[2]);
+
+      if (receivedArray[1] == ADD)
+      {
+        printf( "%d + %d\n", receivedArray[0], receivedArray[2]);
+     } else if (receivedArray[1] == SUBTRACT)
+     {
+        printf( "%d - %d\n", receivedArray[0], receivedArray[2]);
+     } else if (receivedArray[1] == MULTIPLY)
+     {
+        printf( "%d x %d\n", receivedArray[0], receivedArray[2]);
+     } else if (receivedArray[1] == DIVIDE)
+     {
+        printf( "%d / %d\n", receivedArray[0], receivedArray[2]);
+     } else if (receivedArray[1] == RAISE)
+     {
+        printf( "%d ^ %d\n", receivedArray[0], receivedArray[2]);
+     } else
+     {
+        printf( "sqrt of %d\n", receivedArray[0]);
+     }
+
+      result = handle_client( receivedArray );
+
+      // send message back to client
+      // data is contained in datagram
+      // the client addr info is in client_address, which was filled in in recvfrom() call before
+      if(sendto(server_socket, &result, sizeof(result), 0,
+             (struct sockaddr *) &client_address,
+             client_address_length) == -1)
+      {
+          perror("error when trying to sendto\n");
+      }
+
+      }
+
+      return EXIT_SUCCESS;
 
 
-        }
-
-    }
 }
 
 
@@ -72,53 +103,26 @@ int main(int argc, char *argv[]) {
  * handle client
  ************************************************************************/
 
-void * handle_client(void *arg)
+double handle_client( int receivedArray[] )
 {
-    int client_socket = *( (int *) arg );
-    // unlock mutex
-    pthread_mutex_unlock(&lock);
     int firstNumber, operatorFlag;
     int secondNumber = -1;
     double result;
 
-    // read ints from client
-    read(client_socket, &firstNumber, sizeof(int));
-    read(client_socket, &operatorFlag, sizeof(int));
-    if (operatorFlag != 5)
+   firstNumber = receivedArray[0];
+   operatorFlag = receivedArray[1];
+
+    if (operatorFlag != SQRT)
     {
-      read(client_socket, &secondNumber, sizeof(int));
+      secondNumber = receivedArray[2];
     }
-
-    // convert ints from client
-    firstNumber = htonl(firstNumber);
-    operatorFlag = htonl(operatorFlag);
-    secondNumber = htonl(secondNumber);
-
-    // see the numbers passed in
-    printf("firstNumber: %d, operatorFlag: %d, secondNumber (if not provided it's weird): %d\n", firstNumber, operatorFlag, secondNumber);
 
     // do math
     result = doMath( firstNumber, operatorFlag, secondNumber );
 
     printf("result: %2.3f\n", result);
 
-    // send result back to client
-    send(client_socket, &result, sizeof(result), 0 );
-
-    printf("Completed client\n");
-
-    // cleanup
-    if (close(client_socket) == -1)
-    {
-        perror("Error closing socket");
-        pthread_exit(NULL);
-    }
-    else
-    {
-        printf("\nClosed socket to client, exit\n");
-    }
-
-    return 0;
+    return result;
 }
 
 double doMath(int firstNumber, int operatorFlag, int secondNumber)

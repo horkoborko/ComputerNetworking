@@ -39,5 +39,5 @@
 
 // create flags for operators
 typedef enum operators{
-  ADD, SUBTRACT, MULTIPLY, DIVIDE, RAISE, SQRT, INCORRECT_OP
+  ADD=0, SUBTRACT, MULTIPLY, DIVIDE, RAISE, SQRT, INCORRECT_OP
 }operators;
