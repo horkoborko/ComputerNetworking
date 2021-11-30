@@ -40,7 +40,7 @@ int main() {
     while (true)
     {
 
-      printf( "Compute server started\n" );
+      printf( "Computation started\n" );
       // receive int array from *any* client
       // client_addr will be filled in with addr info of where the data was received from
       if ((bytes_received = recvfrom(server_socket,
